@@ -50,6 +50,7 @@ const menuOptions = [
   { label: '租户管理', key: 'Tenants', path: '/tenants' },
   { label: '租户用户', key: 'TenantUsers', path: '/tenant-users' },
   { label: '数据管理', key: 'Data', path: '/data' },
+  { label: '工具', key: 'Tools', path: '/tools' },
 ]
 
 function handleMenuClick(key) {
