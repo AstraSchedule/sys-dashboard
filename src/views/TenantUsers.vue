@@ -20,6 +20,8 @@
           <n-select v-model:value="form.role" :options="roleOptions" />
         </n-form-item>
         <n-form-item label="作用域"><n-input v-model:value="form.scope" placeholder="如：school/grade/class" /></n-form-item>
+        <n-form-item label="强制改密"><n-switch v-model:value="form.must_change_pwd" /></n-form-item>
+        <n-form-item label="允许改名" v-if="form.must_change_pwd"><n-switch v-model:value="form.must_change_username" /></n-form-item>
       </n-form>
     </n-modal>
 
@@ -29,7 +31,7 @@
 
 <script setup>
 import {ref, onMounted, h} from 'vue'
-import {NSpace, NH1, NCard, NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSelect, NPopconfirm, NTag, useMessage} from 'naive-ui'
+import {NSpace, NH1, NCard, NDataTable, NButton, NModal, NForm, NFormItem, NInput, NSelect, NPopconfirm, NSwitch, NTag, useMessage} from 'naive-ui'
 import axios from 'axios'
 import {getAPISRV} from '@/global.js'
 import {getToken} from '@/auth.js'
@@ -44,7 +46,7 @@ const isEdit = ref(false)
 const editId = ref(null)
 const filterNamespace = ref('')
 const namespaceOptions = ref([])
-const form = ref({namespace: '', username: '', password: '', role: 'readonly', scope: ''})
+const form = ref({namespace: '', username: '', password: '', role: 'readonly', scope: '', must_change_pwd: true, must_change_username: false})
 const roleOptions = [
   {label: '管理员', value: 'admin'},
   {label: '校写入', value: 'school_w'},
@@ -99,14 +101,14 @@ const columns = [
 function openCreate() {
   isEdit.value = false
   editId.value = null
-  form.value = {namespace: filterNamespace.value || '', username: '', password: '', role: 'readonly', scope: ''}
+  form.value = {namespace: filterNamespace.value || '', username: '', password: '', role: 'readonly', scope: '', must_change_pwd: true, must_change_username: false}
   showModal.value = true
 }
 
 function openEdit(row) {
   isEdit.value = true
   editId.value = row.id
-  form.value = {namespace: row.namespace, username: row.username, password: '', role: row.role, scope: row.scope || ''}
+  form.value = {namespace: row.namespace, username: row.username, password: '', role: row.role, scope: row.scope || '', must_change_pwd: row.must_change_pwd || false, must_change_username: row.must_change_username || false}
   showModal.value = true
 }
 
@@ -114,7 +116,7 @@ async function handleSave(pwd) {
   saving.value = true
   try {
     if (isEdit.value) {
-      const payload = {role: form.value.role, scope: form.value.scope}
+      const payload = {role: form.value.role, scope: form.value.scope, must_change_pwd: form.value.must_change_pwd, must_change_username: form.value.must_change_username}
       if (form.value.password) payload.password = form.value.password
       await axios.put(`${getAPISRV()}/web/astra-users/${editId.value}`, payload, {headers: getAuthHeaders(pwd)})
       message.success('修改成功')
