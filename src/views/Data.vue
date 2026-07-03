@@ -62,9 +62,7 @@
           <n-button>选择备份文件</n-button>
         </n-upload>
         <n-select v-model:value="importMode" :options="importModeOptions" style="width: 200px;" />
-        <n-select v-model:value="importSource" :options="importSourceOptions" style="width: 200px;" />
-        <n-input v-if="importSource === 'self-hosted'" v-model:value="importNamespace" placeholder="目标 namespace（如 cn/getastra/school-a）" style="width: 300px;" />
-        <n-button type="warning" :loading="importing" :disabled="!uploadFileList.length || (importSource === 'self-hosted' && !importNamespace)" @click="showImportModal = true">导入数据</n-button>
+        <n-button type="warning" :loading="importing" :disabled="!uploadFileList.length" @click="showImportModal = true">导入数据</n-button>
       </n-space>
       <n-text v-if="uploadFileList.length" depth="3" style="font-size: 12px; display: block; margin-top: 8px;">
         已选择: {{ uploadFileList[0]?.name }}
@@ -148,12 +146,6 @@ const importModeOptions = [
   {label: '仅 SaaS 数据', value: 'saas'},
   {label: '仅 Dashboard 数据', value: 'dashboard'},
 ]
-const importSource = ref('standard')
-const importSourceOptions = [
-  {label: '标准备份', value: 'standard'},
-  {label: '自部署备份', value: 'self-hosted'},
-]
-const importNamespace = ref('')
 const rebuilding = ref(false)
 const rebuildImport = ref(true)
 const rebuildScope = ref('full')
@@ -424,8 +416,6 @@ async function handleImport(pwd) {
     const data = JSON.parse(text)
     data.meta = data.meta || {}
     data.meta.mode = importMode.value
-    data.source = importSource.value
-    data.namespace = importNamespace.value
 
     await axios.post(`${getAPISRV()}/web/backup/import`, data, {
       headers: getAuthHeaders(pwd)
