@@ -13,7 +13,7 @@
 
 <script setup>
 import {ref, nextTick} from 'vue'
-import {NModal, NForm, NFormItem, NInput, NSpace, NAlert, useMessage} from 'naive-ui'
+import {NModal, NFormItem, NInput, NSpace, NAlert, useMessage} from 'naive-ui'
 import axios from 'axios'
 import {getAPISRV} from '@/global.js'
 import {getToken} from '@/auth.js'

@@ -74,18 +74,24 @@ const columns = [
     const btns = []
 
     if (row.status === 'normal' && row.record_id) {
-      btns.push(h(NButton, {size: 'small', type: 'warning', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('ban', row, `确认封禁 ${row.subdomain}？将删除 DNS 记录但保留数据库数据。`)}, {default: () => '封禁'}))
-      btns.push(h(NButton, {size: 'small', type: 'error', secondary: true, onClick: () => askPassword('delete', row, `确认删除 ${row.subdomain}？将删除 DNS 和数据库数据，不可恢复。`)}, {default: () => '删除'}))
+      btns.push(
+        h(NButton, {size: 'small', type: 'warning', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('ban', row, `确认封禁 ${row.subdomain}？将删除 DNS 记录但保留数据库数据。`)}, {default: () => '封禁'}),
+        h(NButton, {size: 'small', type: 'error', secondary: true, onClick: () => askPassword('delete', row, `确认删除 ${row.subdomain}？将删除 DNS 和数据库数据，不可恢复。`)}, {default: () => '删除'})
+      )
     }
 
     if (row.status === 'orphan' && row.record_id) {
-      btns.push(h(NButton, {size: 'small', type: 'success', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('complete', row, `确认补全 ${row.subdomain} 的数据库数据？将创建默认管理员账户。`)}, {default: () => '补全'}))
-      btns.push(h(NButton, {size: 'small', type: 'error', secondary: true, onClick: () => askPassword('delete-dns', row, `确认删除 ${row.subdomain} 的 DNS 记录？`)}, {default: () => '删除 DNS'}))
+      btns.push(
+        h(NButton, {size: 'small', type: 'success', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('complete', row, `确认补全 ${row.subdomain} 的数据库数据？将创建默认管理员账户。`)}, {default: () => '补全'}),
+        h(NButton, {size: 'small', type: 'error', secondary: true, onClick: () => askPassword('delete-dns', row, `确认删除 ${row.subdomain} 的 DNS 记录？`)}, {default: () => '删除 DNS'})
+      )
     }
 
     if (row.status === 'abnormal') {
-      btns.push(h(NButton, {size: 'small', type: 'success', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('complete-dns', row, `确认为 ${row.namespace} 补全 DNS 记录？`)}, {default: () => '补全 DNS'}))
-      btns.push(h(NButton, {size: 'small', type: 'warning', secondary: true, onClick: () => askPassword('cleanup', row, `确认清理 ${row.namespace} 的残留数据？`)}, {default: () => '清理残留'}))
+      btns.push(
+        h(NButton, {size: 'small', type: 'success', secondary: true, style: 'margin-right: 4px', onClick: () => askPassword('complete-dns', row, `确认为 ${row.namespace} 补全 DNS 记录？`)}, {default: () => '补全 DNS'}),
+        h(NButton, {size: 'small', type: 'warning', secondary: true, onClick: () => askPassword('cleanup', row, `确认清理 ${row.namespace} 的残留数据？`)}, {default: () => '清理残留'})
+      )
     }
 
     return btns.length ? h(NSpace, {size: 4}, {default: () => btns}) : null

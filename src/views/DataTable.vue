@@ -149,7 +149,7 @@ async function handleDelete(id) {
     message.success('删除成功')
     fetchData()
   } catch (e) {
-    message.error('删除失败')
+    message.error(e?.response?.data?.error || e?.response?.data?.detail || '删除失败')
   }
 }
 
@@ -183,7 +183,7 @@ async function fetchData() {
     const resp = await axios.get(`${getAPISRV()}/web/data/${table.value}`, {headers: {Authorization: `Bearer ${getToken()}`}})
     records.value = resp.data.data || []
   } catch (e) {
-    message.error('获取数据失败')
+    message.error(e?.response?.data?.detail || '获取数据失败')
   } finally {
     loading.value = false
   }

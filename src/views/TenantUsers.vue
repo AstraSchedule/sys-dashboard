@@ -139,7 +139,7 @@ async function handleDelete(id, pwd) {
     message.success('删除成功')
     fetchUsers()
   } catch (e) {
-    message.error('删除失败')
+    message.error(e?.response?.data?.detail || '删除失败')
   }
 }
 
@@ -153,7 +153,7 @@ async function fetchUsers() {
     const ns = new Set(users.value.map(u => u.namespace))
     namespaceOptions.value = Array.from(ns).map(n => ({label: n, value: n}))
   } catch (e) {
-    message.error('获取用户列表失败')
+    message.error(e?.response?.data?.detail || '获取用户列表失败')
   } finally {
     loading.value = false
   }

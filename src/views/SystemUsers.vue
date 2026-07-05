@@ -79,7 +79,7 @@ async function fetchUsers() {
     const resp = await axios.get(`${getAPISRV()}/web/system-users`, {headers: {Authorization: `Bearer ${getToken()}`}})
     users.value = resp.data.data || []
   } catch (e) {
-    message.error('获取用户列表失败')
+    message.error(e?.response?.data?.detail || '获取用户列表失败')
   } finally {
     loading.value = false
   }
@@ -102,7 +102,7 @@ async function handleDelete(id, pwd) {
     message.success('删除成功')
     fetchUsers()
   } catch (e) {
-    message.error('删除失败')
+    message.error(e?.response?.data?.detail || '删除失败')
   }
 }
 

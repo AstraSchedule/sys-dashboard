@@ -167,9 +167,9 @@ const passwordConfirmModal = ref(null)
 const verifiedPassword = ref('')
 let pendingAction = null
 
-const SYS_TABLES = ['system_users', 'tenants']
-const astraTables = computed(() => tables.value.filter(t => !SYS_TABLES.includes(t)))
-const sysTables = computed(() => tables.value.filter(t => SYS_TABLES.includes(t)))
+const SYS_TABLES = new Set(['system_users', 'tenants'])
+const astraTables = computed(() => tables.value.filter(t => !SYS_TABLES.has(t)))
+const sysTables = computed(() => tables.value.filter(t => SYS_TABLES.has(t)))
 
 function withPasswordConfirm(action, hint = '') {
   pendingAction = action
@@ -191,12 +191,12 @@ function getAuthHeaders(pwd) {
   }
 }
 
-const SKIP_KEYS = ['id', 'created_at', 'updated_at']
+const SKIP_KEYS = new Set(['id', 'created_at', 'updated_at'])
 
 const columns = computed(() => {
   if (records.value.length === 0) return []
   const keys = Object.keys(records.value[0])
-  tableColumns.value = keys.filter(k => !SKIP_KEYS.includes(k))
+  tableColumns.value = keys.filter(k => !SKIP_KEYS.has(k))
   return [
     ...tableColumns.value.map(key => ({
       title: key,
@@ -284,7 +284,7 @@ async function fetchTableData(tableName) {
     const resp = await axios.get(`${getAPISRV()}/web/data/${tableName}`, {headers: {Authorization: `Bearer ${getToken()}`}})
     records.value = resp.data.data || []
   } catch (e) {
-    message.error(`获取 ${tableName} 数据失败`)
+    message.error(e?.response?.data?.detail || `获取 ${tableName} 数据失败`)
   } finally {
     loadingData.value = false
   }
@@ -318,7 +318,7 @@ async function handleDelete(id, pwd) {
     message.success('删除成功')
     fetchTableData(activeTable.value)
   } catch (e) {
-    message.error('删除失败')
+    message.error(e?.response?.data?.error || e?.response?.data?.detail || '删除失败')
   }
 }
 
@@ -362,7 +362,7 @@ async function handleExport(mode) {
     URL.revokeObjectURL(url)
     message.success('导出成功')
   } catch (e) {
-    message.error('导出失败')
+    message.error(e?.response?.data?.error || e?.response?.data?.detail || '导出失败')
   } finally {
     exporting.value = ''
   }
@@ -440,7 +440,7 @@ async function fetchTables() {
       await fetchTableData(astraTables.value[0])
     }
   } catch (e) {
-    message.error('获取表列表失败')
+    message.error(e?.response?.data?.detail || '获取表列表失败')
   } finally {
     loadingTables.value = false
   }
