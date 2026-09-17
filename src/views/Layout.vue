@@ -1,41 +1,45 @@
 <template>
-  <n-layout has-sider style="height: 100vh">
-    <n-layout-sider
-      bordered
-      collapse-mode="width"
-      :collapsed-width="64"
-      :width="240"
-      :collapsed="collapsed"
-      show-trigger
-      @collapse="collapsed = true"
-      @expand="collapsed = false"
-    >
-      <div class="sider-logo" :class="{ collapsed }">
-        <img src="https://image-hk-1.oss-accelerate.aliyuncs.com/icon.png" alt="Logo" class="logo-img" />
-        <span v-if="!collapsed" class="logo-text">Dashboard</span>
-      </div>
-      <n-menu
-        v-model:value="activeKey"
-        :collapsed="collapsed"
+  <div class="app-shell">
+    <n-layout has-sider class="app-shell-body">
+      <n-layout-sider
+        bordered
+        collapse-mode="width"
         :collapsed-width="64"
-        :collapsed-icon-size="22"
-        :options="menuOptions"
-        @update:value="handleMenuClick"
-      />
-      <div style="padding: 8px; margin-top: auto;">
-        <n-button quaternary block @click="handleLogout">退出登录</n-button>
-      </div>
-    </n-layout-sider>
-    <n-layout-content style="padding: 24px;">
-      <router-view />
-    </n-layout-content>
-  </n-layout>
+        :width="240"
+        :collapsed="collapsed"
+        show-trigger
+        @collapse="collapsed = true"
+        @expand="collapsed = false"
+      >
+        <div class="sider-logo" :class="{ collapsed }">
+          <img src="https://image-hk-1.oss-accelerate.aliyuncs.com/icon.png" alt="Logo" class="logo-img" />
+          <span v-if="!collapsed" class="logo-text">Dashboard</span>
+        </div>
+        <n-menu
+          v-model:value="activeKey"
+          :collapsed="collapsed"
+          :collapsed-width="64"
+          :collapsed-icon-size="22"
+          :options="menuOptions"
+          @update:value="handleMenuClick"
+        />
+        <div style="padding: 8px; margin-top: auto;">
+          <n-button quaternary block @click="handleLogout">退出登录</n-button>
+        </div>
+      </n-layout-sider>
+      <n-layout-content style="padding: 24px;">
+        <router-view />
+      </n-layout-content>
+    </n-layout>
+    <IcpFiling />
+  </div>
 </template>
 
 <script setup>
 import {ref, computed} from 'vue'
 import {useRouter, useRoute} from 'vue-router'
 import {NLayout, NLayoutSider, NLayoutContent, NMenu, NButton} from 'naive-ui'
+import IcpFiling from '@/components/IcpFiling.vue'
 import {removeToken, removeUserInfo} from '@/auth.js'
 
 const router = useRouter()
@@ -68,6 +72,15 @@ function handleLogout() {
 </script>
 
 <style scoped>
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.app-shell-body {
+  flex: 1 1 auto;
+  min-height: 0;
+}
 .sider-logo {
   display: flex;
   align-items: center;

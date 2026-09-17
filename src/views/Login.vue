@@ -16,6 +16,7 @@
       </n-form>
       <n-button type="primary" block size="large" :loading="loading" @click="handleLogin" style="margin-top: 8px;">登 录</n-button>
     </n-card>
+    <IcpFiling class="login-icp" />
   </div>
 </template>
 
@@ -24,6 +25,7 @@ import {ref} from 'vue'
 import {useRouter} from 'vue-router'
 import {NButton, NCard, NForm, NFormItem, NInput, NH2, NText, useThemeVars, useMessage} from 'naive-ui'
 import {login, setToken, setUserInfo} from '@/auth.js'
+import IcpFiling from '@/components/IcpFiling.vue'
 
 const router = useRouter()
 const message = useMessage()
@@ -61,9 +63,13 @@ async function handleLogin() {
 <style scoped>
 .login-wrapper {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
+}
+.login-icp {
+  margin-top: 16px;
 }
 .login-card {
   width: 360px;
