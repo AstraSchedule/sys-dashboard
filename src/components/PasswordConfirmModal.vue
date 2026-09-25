@@ -5,7 +5,7 @@
         {{ currentHint || '此操作需要验证密码才能执行。' }}
       </n-alert>
       <n-form-item label="当前密码">
-        <n-input ref="passwordInput" v-model:value="password" type="password" show-password-on="click" placeholder="请输入密码" @keyup.enter="handleConfirm" />
+        <n-input ref="passwordInput" v-model:value="password" type="password" show-password-on="click" placeholder="请输入密码" :input-props="{ autocomplete: 'current-password' }" @keyup.enter="handleConfirm" />
       </n-form-item>
     </n-space>
   </n-modal>
