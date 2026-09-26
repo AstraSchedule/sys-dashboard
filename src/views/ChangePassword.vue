@@ -2,7 +2,7 @@
   <div class="login-wrapper" :style="{ background: themeVars.bodyColor }">
     <n-card class="login-card" :bordered="false" :content-style="{ padding: '40px' }">
       <div class="login-header">
-        <img src="https://cn-nb1.rains3.com/kuohublog-images/2026/09/b179a9ca48077ef92e5aea63c3bfa080.png" alt="Logo" class="login-logo" />
+        <img src="https://static.khbit.cn/2026/09/b179a9ca48077ef92e5aea63c3bfa080.png" alt="Logo" class="login-logo" />
         <n-h2 style="margin: 0;">修改密码</n-h2>
         <n-text depth="3" style="font-size: 13px;">首次登录请修改默认密码</n-text>
       </div>
