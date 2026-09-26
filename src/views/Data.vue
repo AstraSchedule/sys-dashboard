@@ -162,7 +162,12 @@ const showImportModal = ref(false)
 const editForm = ref({})
 const createForm = ref({})
 const editRowId = ref(null)
-const tableColumns = ref([])
+// 字段列表由当前记录派生：放进 columns 的 computed 里赋值会在求值过程中写状态，
+// 既违反 computed 的纯函数约定，也会让依赖追踪变得难以推理
+const tableColumns = computed(() => {
+  if (records.value.length === 0) return []
+  return Object.keys(records.value[0]).filter(k => !SKIP_KEYS.has(k))
+})
 const passwordConfirmModal = ref(null)
 const verifiedPassword = ref('')
 let pendingAction = null
@@ -195,8 +200,6 @@ const SKIP_KEYS = new Set(['id', 'created_at', 'updated_at'])
 
 const columns = computed(() => {
   if (records.value.length === 0) return []
-  const keys = Object.keys(records.value[0])
-  tableColumns.value = keys.filter(k => !SKIP_KEYS.has(k))
   return [
     ...tableColumns.value.map(key => ({
       title: key,
